@@ -897,6 +897,19 @@ var Chat = {
             }
         }
     },
+    removeMessage: function (message) {
+        var m = document.getElementById(message.id);
+
+        if (m) {
+            parent = m.parentNode;
+            m.remove();
+
+            // If the bubble is empty, we clear it
+            if (parent.querySelectorAll('div').length == 0) {
+                parent.parentNode.remove();
+            }
+        }
+    },
     appendDate: function(date, prepend) {
         var list = document.querySelector('#chat_widget > div ul');
 

@@ -197,7 +197,11 @@ class Message extends Model
                 $this->id = (string)$stanza->attributes()->id;
             }*/
 
-            if ($stanza->body) {
+            if ($stanza->ephemeral
+            && (string)$stanza->ephemeral->attributes()->xmlns == 'urn:xmpp:ephemeral:0') {
+                $this->body = (string)$stanza->ephemeral->body;
+                $this->timer = (int)$stanza->ephemeral->attributes()->timer;
+            } elseif ($stanza->body) {
                 $this->body = (string)$stanza->body;
             }
 

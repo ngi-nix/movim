@@ -265,10 +265,9 @@ class Rooms extends Base
                                ->first();
 
         if (!$capability || !$capability->isMAM()) {
-            $this->user->messages()->where('jidfrom', $room)->delete();
+            //$this->user->messages()->where('jidfrom', $room)->delete();
         }
 
-        // We clear the presences from the buffer cache and then the DB
         $this->user->session->conferences()
              ->where('conference', $room)
              ->first()->presences()->delete();

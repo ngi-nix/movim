@@ -35,6 +35,7 @@ class Chat extends \Movim\Widget\Base
         $this->registerEvent('message', 'onMessage');
         $this->registerEvent('presence', 'onPresence', 'chat');
         $this->registerEvent('retracted', 'onRetracted');
+        $this->registerEvent('expired', 'onExpired');
         $this->registerEvent('receiptack', 'onMessageReceipt');
         $this->registerEvent('displayed', 'onMessage', 'chat');
         $this->registerEvent('mam_get_handle', 'onMAMRetrieved');
@@ -71,6 +72,11 @@ class Chat extends \Movim\Widget\Base
     public function onRetracted($packet)
     {
         $this->onMessage($packet, false, true);
+    }
+
+    public function onExpired(Message $message)
+    {
+        $this->rpc('Chat.removeMessage', $message);
     }
 
     public function onNotificationCounterClear($params)

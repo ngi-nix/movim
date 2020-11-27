@@ -40,6 +40,12 @@ class Message extends Payload
             $message->save();
             $message = $message->fresh();
 
+            // https://xmpp.org/extensions/inbox/ephemeral-messages.html
+            if ($message->timer) {
+                $ephemeralMessagesHandler = \Movim\EphemeralMessagesHandler::getInstance();
+                $ephemeralMessagesHandler->handle($message);
+            }
+
             if ($message && ($message->body || $message->subject)) {
                 $this->pack($message);
 
