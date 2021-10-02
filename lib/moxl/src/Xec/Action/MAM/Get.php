@@ -2,6 +2,8 @@
 
 namespace Moxl\Xec\Action\MAM;
 
+use App\Message;
+use App\MessageHistoryState;
 use Moxl\Xec\Action;
 use Moxl\Stanza\MAM;
 use Movim\Session;
@@ -60,6 +62,8 @@ class Get extends Action
         }
 
         if ($this->_jid) {
+            MessageHistoryState::setState($this->_jid);
+
             $this->method('handle_contact');
             $this->pack($this->_jid);
         }

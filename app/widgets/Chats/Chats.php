@@ -118,48 +118,29 @@ class Chats extends Base
     /**
      * @brief Get history
      */
-    public function ajaxGetHistory($jid = false)
+    public function ajaxGetHistory()
     {
         $g = new \Moxl\Xec\Action\MAM\Get;
 
         // The following requests seems to be heavy for PostgreSQL
         // see https://stackoverflow.com/questions/40365098/why-is-postgres-not-using-my-index-on-a-simple-order-by-limit-1
         // a little hack is needed to use corectly the indexes
-        if ($jid == false) {
-            $message = $this->user->messages();
+        $message = $this->user->messages();
 
-            $message = (DB::getDriverName() == 'pgsql')
-                ? $message->orderByRaw('published desc nulls last')
-                : $message->orderBy('published', 'desc');
-            $message = $message->first();
+        $message = (DB::getDriverName() == 'pgsql')
+            ? $message->orderByRaw('published desc nulls last')
+            : $message->orderBy('published', 'desc');
+        $message = $message->first();
 
-            if ($message && $message->published) {
-                $g->setStart(strtotime($message->published));
-            } else {
-                // We only sync up the last month the first time
-                $g->setStart(\Carbon\Carbon::now()->subMonth()->timestamp);
-            }
-
-            $g->setLimit(250);
-            $g->request();
-        } elseif ($this->validateJid($jid)) {
-            $message = \App\Message::jid($jid);
-
-            $message = (DB::getDriverName() == 'pgsql')
-                ? $message->orderByRaw('published desc nulls last')
-                : $message->orderBy('published', 'desc');
-            $message = $message->first();
-
-            if ($message && $message->published) {
-                $g->setStart(strtotime($message->published));
-            } else {
-                $g->setLimit(150);
-                $g->setBefore(true);
-            }
-
-            $g->setJid(echapJid($jid));
-            $g->request();
+        if ($message && $message->published) {
+            $g->setStart(strtotime($message->published));
+        } else {
+            // We only sync up the last month the first time
+            $g->setStart(\Carbon\Carbon::now()->subMonth()->timestamp);
         }
+
+        $g->setLimit(250);
+        $g->request();
     }
 
     public function ajaxOpen($jid, $history = true)

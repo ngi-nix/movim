@@ -78,6 +78,11 @@ class Message extends Model
         return $this->hasMany('App\Reaction', 'message_mid', 'mid');
     }
 
+    public function firstInSync()
+    {
+        return $this->hasOne('App\MessageHistoryState', 'message_mid', 'mid');
+    }
+
     public function setFileAttribute(array $file)
     {
         $this->resolved = true;

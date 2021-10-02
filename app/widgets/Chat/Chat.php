@@ -359,6 +359,17 @@ class Chat extends \Movim\Widget\Base
             Notification::clearAndroid($this->route('chat', [$jid]));
             $this->rpc('Chat.scrollToSeparator');
 
+            // MAM
+            $mhs = \App\MessageHistoryState::getState($jid);
+            if (!$mhs/* || $mhs->message_mid == null*/) {
+                $g = new \Moxl\Xec\Action\MAM\Get;
+                $g->setLimit(150);
+                $g->setBefore(true);
+                $g->setJid(echapJid($jid));
+                $g->request();
+            }
+
+            // OMEMO
             $sessions = [];
             $bundles = $this->user->bundles()
                 ->where('jid', $jid)
@@ -814,6 +825,16 @@ class Chat extends \Movim\Widget\Base
                              ->take($this->_pagination)
                              ->get();
 
+        // MAM
+        /*$mhs = \App\MessageHistoryState::getState($jid);
+        if (!$mhs || $mhs->message_mid) {
+            $g = new \Moxl\Xec\Action\MAM\Get;
+            $g->setLimit(60);
+            $g->setBefore(strtotime($mhs->message->published));
+            $g->setJid(echapJid($jid));
+            $g->request();
+        }*/
+
         if ($messages->count() > 0) {
             if ($prepend) {
                 Toast::send($this->__('message.history', $messages->count()));
@@ -1006,11 +1027,6 @@ class Chat extends \Movim\Widget\Base
 
             $this->rpc('Chat.setSpecificElements', $left, $right);
             $this->rpc('Chat.appendMessagesWrapper', $this->_wrapper, false);
-        }
-
-        if ($messages->count() == 0 && !$muc) {
-            //$chats = new Chats;
-            //$chats->ajaxGetHistory($jid);
         }
 
         if ($event) {
