@@ -11,7 +11,7 @@ class MessageHistoryState extends Model
 
     public function message()
     {
-        return $this->belongsTo('App\Message');
+        return $this->hasOne('App\Message', 'mid', 'message_mid');
     }
 
     public function contact()
@@ -24,7 +24,7 @@ class MessageHistoryState extends Model
         MessageHistoryState::where('user_id', \App\User::me()->id)
                            ->where('jidfrom', $jid)->delete();
 
-        $message = \App\Message::jid($jid);
+        $message = \App\Message::jid($jid)->whereNotNull('mamid');
         $message = (DB::getDriverName() == 'pgsql')
             ? $message->orderByRaw('published desc nulls last')
             : $message->orderBy('published', 'desc');

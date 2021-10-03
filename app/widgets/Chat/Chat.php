@@ -826,14 +826,15 @@ class Chat extends \Movim\Widget\Base
                              ->get();
 
         // MAM
-        /*$mhs = \App\MessageHistoryState::getState($jid);
+        $mhs = \App\MessageHistoryState::getState($jid);
         if (!$mhs || $mhs->message_mid) {
             $g = new \Moxl\Xec\Action\MAM\Get;
             $g->setLimit(60);
-            $g->setBefore(strtotime($mhs->message->published));
+            \Utils::debug('MESSAGE MID '.$mhs->message_mid.' '.(string)$mhs->message->mamid);
+            $g->setBefore((string)$mhs->message->mamid);
             $g->setJid(echapJid($jid));
             $g->request();
-        }*/
+        }
 
         if ($messages->count() > 0) {
             if ($prepend) {

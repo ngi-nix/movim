@@ -18,10 +18,18 @@ class CreateMessageHistoryStatesTable extends Migration
 
             $table->unique(['user_id', 'jidfrom']);
         });
+
+        $this->schema->table('messages', function (Blueprint $table) {
+            $table->string('mamid', 32)->nullable();
+        });
     }
 
     public function down()
     {
         $this->schema->drop('message_history_states');
+
+        $this->schema->table('messages', function (Blueprint $table) {
+            $table->dropColumn('mamid');
+        });
     }
 }

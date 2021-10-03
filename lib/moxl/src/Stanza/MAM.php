@@ -94,7 +94,7 @@ class MAM
 
             if ($before) {
                 $set_limit->appendChild(
-                    ($before == true)
+                    ($before === true)
                         ? $dom->createElement('before')
                         : $dom->createElement('before', $before)
                 );

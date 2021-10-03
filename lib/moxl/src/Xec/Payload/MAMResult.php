@@ -38,6 +38,8 @@ class MAMResult extends Payload
                     $message->seen = true;
                 }
 
+                $message->mamid = (string)$stanza->attributes()->id;
+
                 //MessageBuffer::getInstance()->append($message, function() use ($message) {
                     $message->save();
                     $message->clearUnreads();
