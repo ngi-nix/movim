@@ -13,7 +13,7 @@
     composer2nix.url = "github:charlieshanley/composer2nix";
   };
 
-  outputs = { self, nixpkgs, movim, composer2nix }:
+  outputs = { self, nixpkgs, movim-src, composer2nix }:
     let
 
       # Generate a user-friendly version numer
@@ -34,6 +34,7 @@
           ];
         }
       );
+
 
       # It's a shame this is necessary. Alas. Run this after updating the
       # movim-src input: `nix run .#update-nixified-deps`
@@ -73,25 +74,46 @@
         ];
       '';
 
+      #devShell =
+      #  { pkgs }:
+      #    let
+      #      php = php.withExtensions (
+      #        { enabled, all }:
+      #          with all; enabled ++ [ curl mbstring imagick gd pgsql xml ]
+      #      );
+      #    in
+      #      pkgs.mkShell {
+      #        nativeBuildInputs = [ php ];
+      #      };
+
       package =
         { inShell ? false
         , configFile ? defaultConfigFile
         , pkgs
         }:
           let
-            inherit (pkgs) callPackage substituteAll applyPatches writeText lib
-              fetchFromGitHub buildGoModule git nodePackages stdenv
-              imagemagick msmtp rsync runCommand
-              ;
+            #inherit (pkgs) php mkShell callPackage substituteAll applyPatches writeText lib
+            #  fetchFromGitHub buildGoModule git stdenv rsync runCommand
+            #  ;
+            inherit pkgs;
             inherit (builtins) toPath;
 
-            configFile' = writeText "config/db.inc.php" "${configFile}";
-            phpPackage = (callPackage ./deps/php-composition.nix { noDev = true; });
+            configFile' = pkgs.writeText "config/db.inc.php" "${configFile}";
+            phpPackage = (
+              pkgs.callPackage ./deps/php-composition.nix
+                {
+                  noDev = false;
+                }
+            ).overrideAttrs (
+              initial: {
+                nativeBuildInputs = initial.nativeBuildInputs or [] ++ [ pkgs.php74Extensions.imagick pkgs.git ];
+              }
+            );
           in
             # Compose the npm and php packages together
-            runCommand "movim-${version}" {} ''
+            pkgs.runCommand "movim-${version}" {} ''
               mkdir $out
-              ${rsync}/bin/rsync -a ${phpPackage}/ $out
+              ${pkgs.rsync}/bin/rsync -a ${phpPackage}/ $out
               chmod -R +w $out
 
               ln -s ${configFile'} $out/config/db.inc.php
@@ -116,7 +138,22 @@
         defaultPackage = forAttrs self.packages (_: pkgs: pkgs.movim);
 
         # A 'nix develop' environment for interactive hacking
-        devShell = forAttrs self.packages (_: pkgs: pkgs.movim.override { inShell = true; });
+        #devShell = forAttrs self.packages (_: pkgs: pkgs.movim.override { inShell = true; });
+        # devShell = { pkgs, }: pkgs.mkShell {};
+
+        devShell = { pkgs, }:
+          let
+            php = php.withExtensions (
+              { enabled, all }:
+                with all; enabled ++ [ curl mbstring imagick gd pgsql xml ]
+            );
+          in
+            forAttrs self.packages (
+              _: pkgs: pkgs.mkShell {
+                nativeBuildInputs = [ php ];
+              }
+            );
+
 
         # A NixOS module
         nixosModules.movim = { config, pkgs, lib, ... }:
@@ -141,7 +178,7 @@
             };
             php = pkgs.php.withExtensions (
               { enabled, all }:
-                with all; enabled ++ [ curl mbstring magick gd pgsql xml ]
+                with all; enabled ++ [ curl mbstring imagick gd pgsql xml ]
             );
           in
             {
