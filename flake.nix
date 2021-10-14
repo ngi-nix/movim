@@ -12,7 +12,7 @@
     , c4
     }:
       let
-        overlays = [];
+        overlays = [ c4.overlay ];
       in
         flake-utils.lib.eachDefaultSystem (
           system:
@@ -26,28 +26,32 @@
               );
             in
               rec {
-                defaultPackage = { stdenv }: stdenv.mkDerivation rec {
-                  pname = "movim";
-                  version = "0.1.1";
-                  src = ./.;
+                #defaultPackage = packages.${system}.movim;
+                packages = {
+                  movim = pkgs.stdenv.mkDerivation {
+                    pname = "movim";
+                    version = "0.1.1";
+                    src = ./.;
 
-                  composerDeps = c4.fetchComposerDeps {
-                    inherit src;
+                    composerDeps = pkgs.c4.fetchComposerDeps {
+                      #inherit src;
+                      src = ./.;
+                    };
+
+                    nativeBuildInputs = [
+                      php.packages.composer
+                      pkgs.c4.composerSetupHook
+                    ];
+
+                    installPhase = ''
+                      runHook preInstall
+
+                      composer install
+                      cp -r . $out
+
+                      runHook postInstall
+                    '';
                   };
-
-                  nativeBuildInputs = [
-                    php.packages.composer
-                    c4.composerSetupHook
-                  ];
-
-                  installPhase = ''
-                    runHook preInstall
-
-                    composer install
-                    cp -r . $out
-
-                    runHook postInstall
-                  '';
                 };
 
                 devShell = pkgs.mkShell {
