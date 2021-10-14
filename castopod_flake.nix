@@ -142,17 +142,11 @@
         # devShell = { pkgs, }: pkgs.mkShell {};
 
         devShell = { pkgs, }:
-          let
-            php = php.withExtensions (
-              { enabled, all }:
-                with all; enabled ++ [ curl mbstring imagick gd pgsql xml ]
-            );
-          in
-            forAttrs self.packages (
-              _: pkgs: pkgs.mkShell {
-                nativeBuildInputs = [ php ];
-              }
-            );
+          forAttrs self.packages (
+            _: pkgs: pkgs.mkShell {
+              #nativeBuildInputs = [ php ];
+            }
+          );
 
 
         # A NixOS module
