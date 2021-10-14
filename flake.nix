@@ -4,6 +4,7 @@
     flake-utils.url = "github:numtide/flake-utils";
     c4.url = "github:fossar/composition-c4";
     movim-src.url = "github:movim/movim";
+    movim-src.flake = false;
   };
 
   outputs =

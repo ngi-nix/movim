@@ -30,8 +30,6 @@
         "type": "github"
       }
     },
-<<<<<<< HEAD
-=======
     "movim-src": {
       "flake": false,
       "locked": {
@@ -48,7 +46,6 @@
         "type": "github"
       }
     },
->>>>>>> flake_only
     "nixpkgs": {
       "locked": {
         "lastModified": 1633971123,
@@ -69,10 +66,7 @@
       "inputs": {
         "c4": "c4",
         "flake-utils": "flake-utils",
-<<<<<<< HEAD
-=======
         "movim-src": "movim-src",
->>>>>>> flake_only
         "nixpkgs": "nixpkgs"
       }
     }
