@@ -3,6 +3,8 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     c4.url = "github:fossar/composition-c4";
+
+    # NOTE: change this to self if flake gets merged upstream
     movim-src.url = "github:movim/movim";
     movim-src.flake = false;
   };
@@ -29,7 +31,7 @@
               );
             in
               rec {
-                #defaultPackage = packages.${system}.movim;
+                defaultPackage = packages.movim;
                 packages = {
                   movim = pkgs.stdenv.mkDerivation {
                     pname = "movim";
