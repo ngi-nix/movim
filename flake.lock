@@ -30,6 +30,25 @@
         "type": "github"
       }
     },
+<<<<<<< HEAD
+=======
+    "movim-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1634075859,
+        "narHash": "sha256-2t2tPASfi3GI5RBNKUM+39UWdR3OLbJUGNikUPKq9nQ=",
+        "owner": "movim",
+        "repo": "movim",
+        "rev": "ba17fb208279b9389eb389c5f0bc39dae76abe62",
+        "type": "github"
+      },
+      "original": {
+        "owner": "movim",
+        "repo": "movim",
+        "type": "github"
+      }
+    },
+>>>>>>> flake_only
     "nixpkgs": {
       "locked": {
         "lastModified": 1633971123,
@@ -50,6 +69,10 @@
       "inputs": {
         "c4": "c4",
         "flake-utils": "flake-utils",
+<<<<<<< HEAD
+=======
+        "movim-src": "movim-src",
+>>>>>>> flake_only
         "nixpkgs": "nixpkgs"
       }
     }
