@@ -1,0 +1,76 @@
+{
+  "nodes": {
+    "c4": {
+      "locked": {
+        "lastModified": 1623090606,
+        "narHash": "sha256-iQRhXFZEScUHPLwR9wCPnGpNlYnVGxIe3+Zopr1ETi8=",
+        "owner": "fossar",
+        "repo": "composition-c4",
+        "rev": "9232e2b8e54adb310f476f5fe66f4b6fb5996487",
+        "type": "github"
+      },
+      "original": {
+        "owner": "fossar",
+        "repo": "composition-c4",
+        "type": "github"
+      }
+    },
+    "flake-utils": {
+      "locked": {
+        "lastModified": 1631561581,
+        "narHash": "sha256-3VQMV5zvxaVLvqqUrNz3iJelLw30mIVSfZmAaauM3dA=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "7e5bf3925f6fbdfaf50a2a7ca0be2879c4261d19",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "movim-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1634075859,
+        "narHash": "sha256-2t2tPASfi3GI5RBNKUM+39UWdR3OLbJUGNikUPKq9nQ=",
+        "owner": "movim",
+        "repo": "movim",
+        "rev": "ba17fb208279b9389eb389c5f0bc39dae76abe62",
+        "type": "github"
+      },
+      "original": {
+        "owner": "movim",
+        "repo": "movim",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1633971123,
+        "narHash": "sha256-WmI4NbH1IPGFWVkuBkKoYgOnxgwSfWDgdZplJlQ93vA=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "e4ef597edfd8a0ba5f12362932fc9b1dd01a0aef",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "c4": "c4",
+        "flake-utils": "flake-utils",
+        "movim-src": "movim-src",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
