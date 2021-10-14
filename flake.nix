@@ -59,13 +59,8 @@
 
                 devShell = pkgs.mkShell {
                   nativeBuildInputs = [
-                    pkgs.php74.composer
-                    (
-                      pkgs.php74.withExtensions (
-                        { enabled, all }:
-                          with all; enabled ++ [ curl mbstring imagick gd pgsql xml ]
-                      )
-                    )
+                    php
+                    php.packages.composer
                   ];
                 };
 
