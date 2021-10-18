@@ -182,6 +182,8 @@
                         groups.${cfg.user} = {};
                       };
 
+                      environment.systemPackages = [ php composer ];
+
                       services.phpfpm = {
                         phpPackage = php;
                         pools.movim = {
@@ -226,6 +228,7 @@
                             ensurePermissions = { "DATABASE ${cfg.db_name}" = "ALL PRIVILEGES"; };
                           }
                         ];
+                        # TODO: review this and set for allowing peer auth correctly
                         authentication = lib.mkForce ''
                           local all all trust
                           host all ${cfg.user} localhost trust
@@ -250,7 +253,7 @@
                                 PermissionsStartOnly = true;
                                 WorkingDirectory = package;
                                 ExecStart = writeShellScript "movim-init-db" ''
-                                  ${composer}/bin/composer movim:migrate
+                                  ${composer}/bin/composer -n movim:migrate
                                 '';
                               };
                             };
